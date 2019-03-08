@@ -82,7 +82,7 @@ public class Cuenta {
             System.exit(0);
         }
     }
-    //Coment
+    
 
     public synchronized void Depositar(int monto) {
         while ((saldo + monto) > limite && (iteracion < 5)) {
@@ -123,7 +123,7 @@ public class Cuenta {
         System.out.println("" + toString());
     }
 
-    ////////////------------------------------------OVERLOAD----------------------------------------------
+    
     public synchronized void Retirar(int monto, String nombre) {
         while (monto > saldo && (iteracion < 5)) {
             try {
@@ -189,7 +189,7 @@ public class Cuenta {
         }
     }
 
-    //consultar
+    
     public synchronized void Consultar(String nombre) {
         System.out.println("\nOperacion: CONSULTA, Usuario: " + nombre);
         System.out.println("Consulta de saldo: ");
