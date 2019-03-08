@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Cuenta {
 
-    private int limite, saldo;
+    private int limite, saldo, iteracion = 0;
     private String nombre;
 
     public synchronized String getNombre() {
@@ -49,29 +49,58 @@ public class Cuenta {
     }
 
     public synchronized void Retirar(int monto) {
-        while (monto > saldo) {
-            System.out.println("\nNo puede retirar la cantidad de:" + monto + " !!!");
+        while (monto > saldo && (iteracion < 5)) {
             try {
-                wait();
-                System.out.println("++++++++LINE WAIT+++++++++");
+                System.out.println("\n////INTENTO DE RETIRO, Usuario: " + nombre);
+                System.out.println("\nNo puede retirar la cantidad de: " + monto + " !!!");
+                System.out.println("Saldo: " + saldo + "\nEl retiro exede el saldo : " + monto + "\nUsuario: " + nombre);
+                int deuda = saldo;
+                saldo -= deuda;
+                monto -= deuda;
+                System.out.println("Retiro: " + deuda + "  Adeudo: " + monto);
+
+                wait(3000);
+                System.out.println("++++++++WAIT+++++++++");
+                iteracion++;
+                if (iteracion == 5) {
+                    System.out.println("\nNo se puede seguir corriendo este proceso!");
+                    System.exit(0);
+                }
+
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cuenta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        iteracion++;
         System.out.println("\nOperacion: RETIRO, Usuario: " + nombre);
         System.out.println("Saldo actual: " + saldo + " Monto a retirar: " + monto);
         saldo -= monto;
         System.out.println("Saldo Final: " + saldo);
         notify();
-
+        if (iteracion == 5) {
+            System.out.println("\nNo puede seguir corriendo este proceso!");
+            System.exit(0);
+        }
     }
 
     public synchronized void Depositar(int monto) {
-        while (saldo + monto >= limite) {
-            System.out.println("\nNo se puede depositar :" + monto);
+        while ((saldo + monto) > limite && (iteracion < 5)) {
             try {
-                wait();
-                System.out.println("++++++++LINE WAIT+++++++++");
+                System.out.println("\n////INTENTO DE DEPOSITO, Usuario: " + nombre);
+                System.out.println("Saldo total: " + saldo + "\nNo se puede depositar " + monto + "\nLimite de cuenta:" + limite);
+                int debe = saldo + monto - limite;
+                int abono = monto - debe;
+                saldo += abono;
+                monto = debe;
+                System.out.println("Deposito: " + abono + " Pendiente: " + monto);
+
+                wait(3000);
+                System.out.println("++++++++WAIT+++++++++");
+                iteracion++;
+                if (iteracion == 5) {
+                    System.out.println("\nNo puede seguir corriendo este proceso!");
+                    System.exit(0);
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cuenta.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -81,6 +110,10 @@ public class Cuenta {
         saldo += monto;
         System.out.println("Saldo Final: " + saldo);
         notify();
+        if (iteracion == 5) {
+            System.out.println("\nNo puede seguir corriendo este proceso!");
+            System.exit(0);
+        }
     }
 
     public synchronized void Consultar() {
@@ -89,13 +122,25 @@ public class Cuenta {
         System.out.println("" + toString());
     }
 
-    //------------------------------------OVERLOAD----------------------------------------------
+    ////////////------------------------------------OVERLOAD----------------------------------------------
     public synchronized void Retirar(int monto, String nombre) {
-        while (monto > saldo) {
-            System.out.println("No se puede retirar: " + monto);
+        while (monto > saldo && (iteracion < 5)) {
             try {
-                wait();
+                System.out.println("\n////INTENTO DE RETIRO, Usuario: " + nombre);
+                System.out.println("\nNo puede retirar la cantidad de: " + monto + " !!!");
+                System.out.println("Saldo: " + saldo + "\nEl retiro exede el saldo : " + monto + "\nUsuario: " + nombre);
+                int deuda = saldo;
+                saldo -= deuda;
+                monto -= deuda;
+                System.out.println("Retiro: " + deuda + "  Adeudo: " + monto);
+                wait(3000);
                 System.out.println("++++++++LINE WAIT+++++++++");
+                iteracion++;
+                if (iteracion == 5) {
+                    System.out.println("\nNo puede seguir corriendo este proceso!");
+                    System.exit(0);
+                }
+
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cuenta.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -105,14 +150,29 @@ public class Cuenta {
         saldo -= monto;
         System.out.println("Saldo Final: " + saldo);
         notify();
+        if (iteracion == 5) {
+            System.out.println("\nNo puede seguir corriendo este proceso!");
+            System.exit(0);
+        }
     }
 
     public synchronized void Depositar(int monto, String nombre) {
         while (saldo + monto >= limite) {
-            System.out.println("No se puede depositar " + monto);
             try {
-                wait();
+                System.out.println("\n////INTENTO DE DEPOSITO, Usuario: " + nombre);
+                System.out.println("Saldo total: " + saldo + "\nNo se puede depositar " + monto + "\nLimite de cuenta:" + limite);
+                int debe = saldo + monto - limite;
+                int abono = monto - debe;
+                saldo += abono;
+                monto = debe;
+                System.out.println("Deposito: " + abono + " Pendiente: " + monto);
+                
+                wait(3000);
                 System.out.println("++++++++LINE WAIT+++++++++");
+                if (iteracion == 5) {
+                    System.out.println("\nNo puede seguir corriendo este proceso!");
+                    System.exit(0);
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cuenta.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -122,6 +182,10 @@ public class Cuenta {
         saldo += monto;
         System.out.println("Saldo Final: " + saldo);
         notify();
+        if (iteracion == 5) {
+            System.out.println("\nNo puede seguir corriendo este proceso!");
+            System.exit(0);
+        }
     }
 
     //consultar

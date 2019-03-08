@@ -52,7 +52,7 @@ public class Cuenta {
        while(monto>saldo){
            System.out.println("No se puede retirar "+monto);
            try {
-               wait(3000);
+               wait();
                System.out.println("Despues de esperar...");
            } catch (InterruptedException ex) {
                Logger.getLogger(Cuenta.class.getName()).log(Level.SEVERE, null, ex);
