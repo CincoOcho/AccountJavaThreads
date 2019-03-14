@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author JL
+ * @author JL <///7>
  */
 public class Banco {
 
